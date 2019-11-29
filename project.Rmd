@@ -1,7 +1,7 @@
 ---
 title: "HOMEWORK1"
-output: 
-  html_document: 
+output:
+  html_document:
     df_print: paged
 ---
 ## **Ceyhun Onur**
@@ -24,6 +24,7 @@ library(data.table)
 matches <- fread(paste0(getwd(), "/data/matches.csv"), select=c("match_id", "match_hometeam_name", "match_awayteam_name", "league_id","match_status","match_hometeam_score", "match_awayteam_score"))
 # get only finished english premier league matches
 finished_epl_matches <- matches[league_id == 148 & match_status == "Finished"]
+finished_epl_matches[, outcome := (ifelse(match_hometeam_score == match_awayteam_score, 0 , ifelse(match_hometeam_score > match_awayteam_score, 1 , -1)))]
 finished_epl_matches
 ```
 
@@ -36,17 +37,26 @@ bets <- fread(paste0(getwd(), "/data/bets.csv"))
 bets <- bets[variable %in% c("odd_1", "odd_x", "odd_2" )]
 # join bets and match data by match_id
 merged_data <- merge(finished_epl_matches, bets, by='match_id')
-# find the most active bookmaker
-bookmaker_data_count <- bets[, .N, by = c("odd_bookmakers")]
-bookmaker_data_count <- bookmaker_data_count[order(-N)]
-# select the first 4 bookmaker name that has most bets
-bookmaker_names <- bookmaker_data_count[1:4]$odd_bookmakers
-bookmaker_data_count
-bookmaker_names
+merged_data
 ```
 
 ### Custom functions:
 ```{r}
+RPS_single<- function(probs,outcomes){
+  probs = cumsum(probs)
+  outcomes = cumsum(outcomes)
+  RPS = sum((probs-outcomes )^2) / (length(probs)-1)
+  return(RPS)
+}
+
+RPS_matrix<- function(probs,outcomes){
+  probs=as.matrix(probs)
+  outcomes=as.matrix(outcomes)
+  probs=t(apply(t(probs), 2, cumsum))
+  outcomes=t(apply(t(outcomes), 2, cumsum))
+  RPS = apply((probs-outcomes)^2,1,sum) / (ncol(probs)-1)
+  return(RPS)
+}
 # Use this function to analyze for different bookmakers.
 bookmaker_draw_analysis <- function(bookmaker_name, data) {
   # get the data with selected bookmaker
@@ -72,22 +82,57 @@ bookmaker_draw_analysis <- function(bookmaker_name, data) {
   bookmaker_bets[, p_lose_imp:=p_lose / (p_win + p_draw + p_lose)]
 }
 
-first_past_excluded <- bookmaker_draw_analysis(TRUE, merged_data)
-bookmaker_names
-first_past_excluded
+rps<- function(probs,outcomes){
+  probs = cumsum(probs)
+  outcomes = cumsum(outcomes)
+  RPS = sum((probs-outcomes )^2) / (length(probs)-1)
+  return(RPS)
+}
+
+past_match_predictions <- bookmaker_draw_analysis(TRUE, merged_data)
+past_match_predictions <- past_match_predictions[, -c("p_win","p_draw","p_lose")]
+setDT(past_match_predictions, key = "match_id")[finished_epl_matches, outcome := i.outcome]
+past_match_predictions
+```
+
+```{r}
+past_match_predictions[,pred_id:=1:.N]
+outcome_for_rps=data.table::dcast(past_match_predictions,pred_id~outcome,value.var='pred_id')
+outcome_for_rps[,pred_id:=NULL]
+outcome_for_rps[is.na(outcome_for_rps)]=0
+outcome_for_rps[outcome_for_rps>0]=1
+
+overall_results <- past_match_predictions[,rps := RPS_matrix(past_match_predictions[,list(p_lose_imp,p_draw_imp,p_win_imp)],outcome_for_rps)]
+overall_results[,pred_id:=NULL]
+overall_results <- data.table(overall_results)
+overall_results
+```
+
+```{r}
+bookmaker_rps <- aggregate(overall_results[, rps], list(overall_results$odd_bookmakers), mean)
+names(bookmaker_rps)[1] <- "odd_bookmakers"
+names(bookmaker_rps)[2] <- "rps_mean"
+bookmaker_rps <- data.table(bookmaker_rps)
+bookmaker_rps <- bookmaker_rps[order(rps_mean)]
+bookmaker_rps
+mean(bookmaker_rps$rps_mean)
 ```
 
 ```{r}
 unplayed_epl_matches <- matches[league_id == 148 & is.na(match_status)]
 unplayed_epl_matches <- unplayed_epl_matches[,-c("match_status", "match_hometeam_score", "match_awayteam_score", "league_id")]
 unplayed_merged_data <- merge(unplayed_epl_matches, bets, by='match_id')
-first_unplayed_predictions <- bookmaker_draw_analysis(TRUE, unplayed_merged_data)
-first_unplayed_predictions <-  merge(unplayed_epl_matches, first_unplayed_predictions, by='match_id')
-first_unplayed_predictions
+unplayed_predictions <- bookmaker_draw_analysis(TRUE, unplayed_merged_data)
+unplayed_predictions <- unplayed_predictions[, -c("p_win","p_draw","p_lose")]
+
+unplayed_predictions <-  merge(unplayed_epl_matches, unplayed_predictions, by='match_id')
+setDT(unplayed_predictions, key = "odd_bookmakers")[bookmaker_rps, bookmaker_rps_ave := i.rps_mean]
+unplayed_predictions
 ```
+
 ```{r}
-average_cols = c("p_win","p_draw","p_lose","p_win_imp","p_draw_imp","p_lose_imp")
-average_predictions = first_unplayed_predictions[, lapply(.SD, mean), .SDcols = average_cols, by=match_id]
+average_cols = c("p_win_imp","p_draw_imp","p_lose_imp")
+average_predictions = unplayed_predictions[, lapply(.SD, mean), .SDcols = average_cols, by=match_id]
 average_predictions = merge(unplayed_epl_matches, average_predictions, by='match_id')
 average_predictions
 ```
