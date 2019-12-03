@@ -43,11 +43,11 @@ bets <- rbind(bets, list(273235, "ComeOn", NA, "odd_2", 6.95))
 
 bets <- rbind(bets, list(273235, "youwin", NA, "odd_1", 1.45))
 bets <- rbind(bets, list(273235, "youwin", NA, "odd_x", 4.30))
-bets <- rbind(bets, list(273235, "youwin", NA, "odd_2", 6.50))
+bets <- rbind(bets, list(273235, "youwin", NA, "odd_2", 6.25))
 
-bets <- rbind(bets, list(273235, "Betsafe", NA, "odd_1", 1.48))
-bets <- rbind(bets, list(273235, "Betsafe", NA, "odd_x", 4.65))
-bets <- rbind(bets, list(273235, "Betsafe", NA, "odd_2", 7.55))
+bets <- rbind(bets, list(273235, "Betsafe", NA, "odd_1", 1.49))
+bets <- rbind(bets, list(273235, "Betsafe", NA, "odd_x", 4.75))
+bets <- rbind(bets, list(273235, "Betsafe", NA, "odd_2", 7.20))
 
 
 bets <- rbind(bets, list(273240, "ComeOn", NA, "odd_1", 1.95))
@@ -63,21 +63,21 @@ bets <- rbind(bets, list(273240, "Betsafe", NA, "odd_x", 3.40))
 bets <- rbind(bets, list(273240, "Betsafe", NA, "odd_2", 4.25))
 
 
-bets <- rbind(bets, list(273239, "ComeOn", NA, "odd_1", 1.40))
-bets <- rbind(bets, list(273239, "ComeOn", NA, "odd_x", 5.30))
-bets <- rbind(bets, list(273239, "ComeOn", NA, "odd_2", 8.00))
+bets <- rbind(bets, list(273239, "ComeOn", NA, "odd_1", 1.38))
+bets <- rbind(bets, list(273239, "ComeOn", NA, "odd_x", 5.40))
+bets <- rbind(bets, list(273239, "ComeOn", NA, "odd_2", 8.25))
 
-bets <- rbind(bets, list(273239, "youwin", NA, "odd_1", 1.33))
+bets <- rbind(bets, list(273239, "youwin", NA, "odd_1", 1.30))
 bets <- rbind(bets, list(273239, "youwin", NA, "odd_x", 5.25))
-bets <- rbind(bets, list(273239, "youwin", NA, "odd_2", 7.25))
+bets <- rbind(bets, list(273239, "youwin", NA, "odd_2", 8.25))
 
 bets <- rbind(bets, list(273239, "Betsafe", NA, "odd_1", 1.39))
-bets <- rbind(bets, list(273239, "Betsafe", NA, "odd_x", 5.45))
-bets <- rbind(bets, list(273239, "Betsafe", NA, "odd_2", 8.35))
+bets <- rbind(bets, list(273239, "Betsafe", NA, "odd_x", 5.40))
+bets <- rbind(bets, list(273239, "Betsafe", NA, "odd_2", 8.60))
 
 
-bets <- rbind(bets, list(273232, "ComeOn", NA, "odd_1", 1.30))
-bets <- rbind(bets, list(273232, "ComeOn", NA, "odd_x", 6.10))
+bets <- rbind(bets, list(273232, "ComeOn", NA, "odd_1", 1.29))
+bets <- rbind(bets, list(273232, "ComeOn", NA, "odd_x", 6.20))
 bets <- rbind(bets, list(273232, "ComeOn", NA, "odd_2", 10.00))
 
 bets <- rbind(bets, list(273232, "youwin", NA, "odd_1", 1.25))
@@ -85,8 +85,8 @@ bets <- rbind(bets, list(273232, "youwin", NA, "odd_x", 6.00))
 bets <- rbind(bets, list(273232, "youwin", NA, "odd_2", 9.50))
 
 bets <- rbind(bets, list(273232, "Betsafe", NA, "odd_1", 1.29))
-bets <- rbind(bets, list(273232, "Betsafe", NA, "odd_x", 6.80))
-bets <- rbind(bets, list(273232, "Betsafe", NA, "odd_2", 10.00))
+bets <- rbind(bets, list(273232, "Betsafe", NA, "odd_x", 6.55))
+bets <- rbind(bets, list(273232, "Betsafe", NA, "odd_2", 10.50))
 
 bets = bets[order(match_id)]
 
@@ -208,4 +208,18 @@ average_cols = c("p_win_imp","p_draw_imp","p_lose_imp")
 submission = first_n_bookmakers[, lapply(.SD, mean), .SDcols = average_cols, by=match_id]
 submission_txt = paste(t(submission[, c("match_id", "p_win_imp", "p_draw_imp", "p_lose_imp")]), collapse=',')
 submission_txt
+```
+
+```{r}
+submission$outcome = c(-1, -1, 1, 1,0,0,0,1,1,0)
+submission[,pred_id:=1:.N]
+outcome_for_rps=data.table::dcast(submission,pred_id~outcome,value.var='pred_id')
+outcome_for_rps[,pred_id:=NULL]
+outcome_for_rps[is.na(outcome_for_rps)]=0
+outcome_for_rps[outcome_for_rps>0]=1
+
+overall_results <- submission[,rps := RPS_matrix(submission[,list(p_lose_imp,p_draw_imp,p_win_imp)],outcome_for_rps)]
+overall_results[,pred_id:=NULL]
+overall_results <- data.table(overall_results)
+overall_results
 ```
