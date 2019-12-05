@@ -88,6 +88,31 @@ bets <- rbind(bets, list(273232, "Betsafe", NA, "odd_1", 1.29))
 bets <- rbind(bets, list(273232, "Betsafe", NA, "odd_x", 6.55))
 bets <- rbind(bets, list(273232, "Betsafe", NA, "odd_2", 10.50))
 
+
+bets <- rbind(bets, list(273245, "ComeOn", NA, "odd_1", 1.77))
+bets <- rbind(bets, list(273245, "ComeOn", NA, "odd_x", 3.65))
+bets <- rbind(bets, list(273245, "ComeOn", NA, "odd_2", 4.65))
+
+bets <- rbind(bets, list(273245, "youwin", NA, "odd_1", 1.70))
+bets <- rbind(bets, list(273245, "youwin", NA, "odd_x", 3.80))
+bets <- rbind(bets, list(273245, "youwin", NA, "odd_2", 4.50))
+
+bets <- rbind(bets, list(273245, "Betsafe", NA, "odd_1", 1.82))
+bets <- rbind(bets, list(273245, "Betsafe", NA, "odd_x", 3.75))
+bets <- rbind(bets, list(273245, "Betsafe", NA, "odd_2", 4.85))
+
+bets <- rbind(bets, list(273247, "ComeOn", NA, "odd_1", 1.29))
+bets <- rbind(bets, list(273247, "ComeOn", NA, "odd_x", 5.85))
+bets <- rbind(bets, list(273247, "ComeOn", NA, "odd_2", 9.75))
+
+bets <- rbind(bets, list(273247, "youwin", NA, "odd_1", 1.25))
+bets <- rbind(bets, list(273247, "youwin", NA, "odd_x", 5.75))
+bets <- rbind(bets, list(273247, "youwin", NA, "odd_2", 9.75))
+
+bets <- rbind(bets, list(273247, "Betsafe", NA, "odd_1", 1.33))
+bets <- rbind(bets, list(273247, "Betsafe", NA, "odd_x", 5.90))
+bets <- rbind(bets, list(273247, "Betsafe", NA, "odd_2", 10.00))
+
 bets = bets[order(match_id)]
 
 ```
@@ -146,10 +171,14 @@ rps<- function(probs,outcomes){
   RPS = sum((probs-outcomes )^2) / (length(probs)-1)
   return(RPS)
 }
+```
+
+```{r}
 
 past_match_predictions <- bookmaker_draw_analysis(TRUE, merged_data)
 past_match_predictions <- past_match_predictions[, -c("p_win","p_draw","p_lose")]
 setDT(past_match_predictions, key = "match_id")[finished_epl_matches, outcome := i.outcome]
+setDT(past_match_predictions, key = "match_id")[finished_epl_matches, epoch := i.epoch]
 past_match_predictions
 ```
 
@@ -168,6 +197,7 @@ overall_results
 
 ```{r}
 bookmaker_rps <- aggregate(overall_results[, rps], list(overall_results$odd_bookmakers), mean)
+
 names(bookmaker_rps)[1] <- "odd_bookmakers"
 names(bookmaker_rps)[2] <- "rps_mean"
 bookmaker_rps <- data.table(bookmaker_rps)
@@ -177,7 +207,7 @@ mean(bookmaker_rps$rps_mean)
 ```
 
 ```{r}
-unplayed_epl_matches <- matches[league_id == 148 & is.na(match_status) & epoch < as.integer(as.POSIXct("2019-12-02"))] 
+unplayed_epl_matches <- matches[league_id == 148 & is.na(match_status) & epoch < as.integer(as.POSIXct("2019-12-06"))] 
 unplayed_epl_matches <- unplayed_epl_matches[,-c("match_status", "match_hometeam_score", "match_awayteam_score", "league_id")]
 unplayed_epl_matches
 ```
