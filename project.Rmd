@@ -35,84 +35,17 @@ bets <- fread(paste0(getwd(), "/data/bets.csv"))
 # add column to indicate if match ended as draw
 # get only bets data with win, draw or lose.
 bets <- bets[variable %in% c("odd_1", "odd_x", "odd_2" )]
-
-## CHANGE HERE BEFORE SUBMIT
-bets <- rbind(bets, list(273235, "ComeOn", NA, "odd_1", 1.48))
-bets <- rbind(bets, list(273235, "ComeOn", NA, "odd_x", 4.30))
-bets <- rbind(bets, list(273235, "ComeOn", NA, "odd_2", 6.95))
-
-bets <- rbind(bets, list(273235, "youwin", NA, "odd_1", 1.45))
-bets <- rbind(bets, list(273235, "youwin", NA, "odd_x", 4.30))
-bets <- rbind(bets, list(273235, "youwin", NA, "odd_2", 6.25))
-
-bets <- rbind(bets, list(273235, "Betsafe", NA, "odd_1", 1.49))
-bets <- rbind(bets, list(273235, "Betsafe", NA, "odd_x", 4.75))
-bets <- rbind(bets, list(273235, "Betsafe", NA, "odd_2", 7.20))
-
-
-bets <- rbind(bets, list(273240, "ComeOn", NA, "odd_1", 1.95))
-bets <- rbind(bets, list(273240, "ComeOn", NA, "odd_x", 3.35))
-bets <- rbind(bets, list(273240, "ComeOn", NA, "odd_2", 4.20))
-
-bets <- rbind(bets, list(273240, "youwin", NA, "odd_1", 1.83))
-bets <- rbind(bets, list(273240, "youwin", NA, "odd_x", 3.25))
-bets <- rbind(bets, list(273240, "youwin", NA, "odd_2", 4.20))
-
-bets <- rbind(bets, list(273240, "Betsafe", NA, "odd_1", 2.03))
-bets <- rbind(bets, list(273240, "Betsafe", NA, "odd_x", 3.40))
-bets <- rbind(bets, list(273240, "Betsafe", NA, "odd_2", 4.25))
-
-
-bets <- rbind(bets, list(273239, "ComeOn", NA, "odd_1", 1.38))
-bets <- rbind(bets, list(273239, "ComeOn", NA, "odd_x", 5.40))
-bets <- rbind(bets, list(273239, "ComeOn", NA, "odd_2", 8.25))
-
-bets <- rbind(bets, list(273239, "youwin", NA, "odd_1", 1.30))
-bets <- rbind(bets, list(273239, "youwin", NA, "odd_x", 5.25))
-bets <- rbind(bets, list(273239, "youwin", NA, "odd_2", 8.25))
-
-bets <- rbind(bets, list(273239, "Betsafe", NA, "odd_1", 1.39))
-bets <- rbind(bets, list(273239, "Betsafe", NA, "odd_x", 5.40))
-bets <- rbind(bets, list(273239, "Betsafe", NA, "odd_2", 8.60))
-
-
-bets <- rbind(bets, list(273232, "ComeOn", NA, "odd_1", 1.29))
-bets <- rbind(bets, list(273232, "ComeOn", NA, "odd_x", 6.20))
-bets <- rbind(bets, list(273232, "ComeOn", NA, "odd_2", 10.00))
-
-bets <- rbind(bets, list(273232, "youwin", NA, "odd_1", 1.25))
-bets <- rbind(bets, list(273232, "youwin", NA, "odd_x", 6.00))
-bets <- rbind(bets, list(273232, "youwin", NA, "odd_2", 9.50))
-
-bets <- rbind(bets, list(273232, "Betsafe", NA, "odd_1", 1.29))
-bets <- rbind(bets, list(273232, "Betsafe", NA, "odd_x", 6.55))
-bets <- rbind(bets, list(273232, "Betsafe", NA, "odd_2", 10.50))
-
-
-bets <- rbind(bets, list(273245, "ComeOn", NA, "odd_1", 1.77))
-bets <- rbind(bets, list(273245, "ComeOn", NA, "odd_x", 3.65))
-bets <- rbind(bets, list(273245, "ComeOn", NA, "odd_2", 4.65))
-
-bets <- rbind(bets, list(273245, "youwin", NA, "odd_1", 1.70))
-bets <- rbind(bets, list(273245, "youwin", NA, "odd_x", 3.80))
-bets <- rbind(bets, list(273245, "youwin", NA, "odd_2", 4.50))
-
-bets <- rbind(bets, list(273245, "Betsafe", NA, "odd_1", 1.82))
-bets <- rbind(bets, list(273245, "Betsafe", NA, "odd_x", 3.75))
-bets <- rbind(bets, list(273245, "Betsafe", NA, "odd_2", 4.85))
-
-bets <- rbind(bets, list(273247, "ComeOn", NA, "odd_1", 1.29))
-bets <- rbind(bets, list(273247, "ComeOn", NA, "odd_x", 5.85))
-bets <- rbind(bets, list(273247, "ComeOn", NA, "odd_2", 9.75))
-
-bets <- rbind(bets, list(273247, "youwin", NA, "odd_1", 1.25))
-bets <- rbind(bets, list(273247, "youwin", NA, "odd_x", 5.75))
-bets <- rbind(bets, list(273247, "youwin", NA, "odd_2", 9.75))
-
-bets <- rbind(bets, list(273247, "Betsafe", NA, "odd_1", 1.33))
-bets <- rbind(bets, list(273247, "Betsafe", NA, "odd_x", 5.90))
-bets <- rbind(bets, list(273247, "Betsafe", NA, "odd_2", 10.00))
-
+bets_extra <- fread(paste0(getwd(), "/data/bets_extra.csv"))
+names(bets_extra)[1] <- "match_id"
+names(bets_extra)[2] <- "odd_bookmakers"
+names(bets_extra)[3] <- "odd_1"
+names(bets_extra)[4] <- "odd_x"
+names(bets_extra)[5] <- "odd_2"
+modified_time = file.info(paste0(getwd(), "/data/bets.csv"))$mtime 
+bets_extra = melt(bets_extra, id.vars = c("match_id", "odd_bookmakers"),
+                measure.vars = c("odd_1", "odd_x", "odd_2"))
+bets_extra[, odd_epoch := as.numeric(modified_time)]
+bets <- rbind(bets, bets_extra)
 bets = bets[order(match_id)]
 
 ```
@@ -205,9 +138,31 @@ bookmaker_rps <- bookmaker_rps[order(rps_mean)]
 bookmaker_rps
 mean(bookmaker_rps$rps_mean)
 ```
+```
+# Don't run this with other codes. This is a test code for to find optimal n (5 currently).
+for (n in seq(0,60,1)) {
+setDT(past_match_predictions, key = "odd_bookmakers")[bookmaker_rps, bookmaker_rps_ave := i.rps_mean]
+first_n_bookmakers = past_match_predictions[order(match_id, bookmaker_rps_ave)]
+first_n_bookmakers = first_n_bookmakers[, .SD[1:n], by=match_id]
+submission = first_n_bookmakers[, lapply(.SD, mean), .SDcols = average_cols, by=match_id]
+past_match_predictions = past_match_predictions[, .SD, by=match_id]
+setDT(submission, key = "match_id")[past_match_predictions, outcome := i.outcome]
+submission[,pred_id:=1:.N]
+outcome_for_rps=data.table::dcast(submission,pred_id~outcome,value.var='pred_id')
+outcome_for_rps[,pred_id:=NULL]
+outcome_for_rps[is.na(outcome_for_rps)]=0
+outcome_for_rps[outcome_for_rps>0]=1
+
+overall_results <- submission[,rps := RPS_matrix(submission[,list(p_lose_imp,p_draw_imp,p_win_imp)],outcome_for_rps)]
+overall_results[,pred_id:=NULL]
+overall_results <- data.table(overall_results)
+overall_results = overall_results[c(-1,-2)]
+cat("n= ",n,"mean= ",mean(overall_results$rps, na.rm=TRUE),"\n")
+}
+```
 
 ```{r}
-unplayed_epl_matches <- matches[league_id == 148 & is.na(match_status) & epoch < as.integer(as.POSIXct("2019-12-06"))] 
+unplayed_epl_matches <- matches[league_id == 148 & is.na(match_status) & epoch < as.integer(as.POSIXct("2019-12-17"))] 
 unplayed_epl_matches <- unplayed_epl_matches[,-c("match_status", "match_hometeam_score", "match_awayteam_score", "league_id")]
 unplayed_epl_matches
 ```
@@ -230,17 +185,15 @@ average_predictions
 ```
 
 ```{r}
-#submission = unplayed_predictions[bookmaker_rps_ave == min(bookmaker_rps_ave)]
-n = 3
+n = 5
 first_n_bookmakers = unplayed_predictions[order(match_id, bookmaker_rps_ave)]
 first_n_bookmakers = first_n_bookmakers[, .SD[1:n], by=match_id]
-average_cols = c("p_win_imp","p_draw_imp","p_lose_imp")
 submission = first_n_bookmakers[, lapply(.SD, mean), .SDcols = average_cols, by=match_id]
 submission_txt = paste(t(submission[, c("match_id", "p_win_imp", "p_draw_imp", "p_lose_imp")]), collapse=',')
 submission_txt
 ```
 
-```{r}
+```
 submission$outcome = c(-1, -1, 1, 1,0,0,0,1,1,0)
 submission[,pred_id:=1:.N]
 outcome_for_rps=data.table::dcast(submission,pred_id~outcome,value.var='pred_id')
