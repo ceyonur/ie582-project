@@ -98,11 +98,14 @@ bookmaker_draw_analysis <- function(bookmaker_name, data) {
   bookmaker_bets[, p_lose_imp:=p_lose / (p_win + p_draw + p_lose)]
 }
 
-rps<- function(probs,outcomes){
-  probs = cumsum(probs)
-  outcomes = cumsum(outcomes)
-  RPS = sum((probs-outcomes )^2) / (length(probs)-1)
-  return(RPS)
+RPS_model<- function(home,draw,away,outcome){
+  probs = cbind(home,draw,away)
+  outcome = as.integer(outcome)
+  outcome_h = as.integer(outcome == 1)
+  outcome_d = as.integer(outcome == 2)
+  outcome_a = as.integer(outcome == 3)
+  outcomes = cbind(outcome_h, outcome_d,outcome_a)
+  return(RPS_matrix(probs,outcomes))
 }
 ```
 
@@ -162,7 +165,7 @@ cat("n= ",n,"mean= ",mean(overall_results$rps, na.rm=TRUE),"\n")
 ```
 
 ```{r}
-unplayed_epl_matches <- matches[league_id == 148 & is.na(match_status) & epoch < as.integer(as.POSIXct("2019-12-17"))] 
+unplayed_epl_matches <- matches[league_id == 148 & is.na(match_status) & epoch < as.integer(as.POSIXct("2019-12-30"))] 
 unplayed_epl_matches <- unplayed_epl_matches[,-c("match_status", "match_hometeam_score", "match_awayteam_score", "league_id")]
 unplayed_epl_matches
 ```
