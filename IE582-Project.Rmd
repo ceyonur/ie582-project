@@ -1,0 +1,112 @@
+---
+title: "IE582-Project"
+author: "Barış Işık & Ceyhun Onur & Seval Ata"
+date: "03.01.2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 1. Introduction
+
+Problem description, summary of the proposed approach, descriptive analysis of the given data.
+
+**Problem description:**
+
+Football is one of the most popular sports around the world and therefore it is also a global industry. The industry is improving with technological innovations considering both players or referees such as video assistant referee and electronic performance and tracking systems. Besides the investments on improving the game's itself, there is a significant interest for the sports forecasting. Especially with the increasing amount and type of data collected, betting market has grown rapidly in the last decade [Corentin HERBINET]. 
+
+The significant increase in the available data also introduces new challenges about the effective usage of this information. In this project, it is aimed to understand the behavior of different betting companies and leagues with the use of available information from different sources. The focus of the project is to provide better forecasts for 1x2 bets (i.e. home, tie, away) compared to bookmakers using the odds data and other type information we can come up with. To achieve this, we are asked to provide the predicted probabilities for the outcomes of several English Premier League matches by using a large data from various bookmakers and the data of previous matches.
+
+**Summary of the proposed approach: **
+
+Our problem can be considered as a classification problem with three labels (home, tie away) but it is an ordinal regression problem because of the nature of the target class. Because it is a multiclass and ordinal regression problem, we tried to find the most relevant methods in addition to the methods we have learnt in the class. 
+
+As [ref] and [ref] mentioned in their studies that oddmakers provides good probabilities since bet companies constantly analyze every aspect of teams including newest events and statuses of players and all related variables, we initially tried to analyze the bet odds and their implied probabilities as our naive approach. So, we analyzed their odds and try to find outcome probabilities based on their probability. Since the first rounds of submissions were early, we were not ready to construct our ML models. Meanwhile, we tried to find minimum RPS among the bet companies. The details of this naive approach will be given later in this report.
+
+Then, we decided to use glmnet package with both lasso and ridge regression, and also the elastic net as the combination of ridge and lasso regression. Furthermore, we saw during the literature review that multinomial logistic regression is also preferred for multiclass regression problems. Since our problem is an ordinal regression problem, we also worked on ordinal logistic regression model. Similarly, we used Random Forest as mentioned in the literature review that it provides good results. Additionally, we searched about Ordinal Forest to adapt it to our problem. A brief information about those extended versions of logistic regression and random forest will be given in the Approach section.
+
+**Descriptive analysis of the given data: **
+
+We have been given five different data files which stores the information about soccer games played in 6 leagues from October 15th, 2018 till today to utilize within this project. Their contents are summarized below. We utilized not all the information provided but some parts which we considered as significant.
+
+Data  | Content
+------------- | -------------
+Match Information   | match id, epoch, status, live, hometeam, awayteam, scores, halftime scores, extra scores, penalty scores
+Bet Information     |  match id, bookmakers, epoch, odd type, odd value 
+Match Statistics    |  statistics related to the finished matches (posession, corner kicks, goal attempts, blocked shots, attacks, saves etc.)
+Goal Information    |  match_id, time, score, home scorer, away scorer
+Booking Information    |  information about the yellow/red cards for finished matches (time, home or away fault, card)
+
+## Related Literature
+
+Summarize relevant literature if there is any
+(Ekleyeceğim)
+
+```{r}
+
+```
+
+
+## Approach
+
+Test development environment / 5 model & parameters / Feature combinations
+(development ortamımızdan bahsedilecek, bir çok model-parametre-feature kombinasyonunu deniyor ve bunların tarihçesini tutuyoruz)
+
+**Feature Engineering / Data Preprocessing (?)**
+
+Not: ELO hesabında ikinci sezon başlangıcında varyansı yarıya düşürüyoruz.
+
+How many bookmakers
+
+**Model Construction**
+
+Detailed information about the models.
+
+Multinomial logistic regression is a classification method that generalizes logistic regression to multiclass problems, i.e. with more than two possible discrete outcomes [Wikipedia].
+
+1-Multinomial logistic regression  https://stats.idre.ucla.edu/r/dae/multinomial-logistic-regression/
+2-Ordinal logistic regression  https://stats.idre.ucla.edu/r/dae/ordinal-logistic-regression/
+3-glmnet lasso ridge penalty
+4-Random Forest
+5-OrdinalForest  https://cran.r-project.org/web/packages/ordinalForest/ordinalForest.pdf a random forest based prediction method for ordinal response variables
+
+
+**Performance Evaluation Metrics**
+
+Explain your approach to this problem.
+
+```{r}
+
+```
+
+## Results
+
+Provide your results and discussion.
+
+```{r}
+
+```
+
+## Conclusions and Future Work
+
+Summarize your findings and comments regarding your
+approach. What are possible extensions to have a better approach?
+
+Future work: improved data, player-centered metrics
+
+```{r}
+
+```
+
+## Code
+
+Provide the Github link for your codes at the end of your report.
+
+```{r}
+
+```
+
+
+
