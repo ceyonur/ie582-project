@@ -37,4 +37,4 @@ rsconnect/
 packrat/lib*/
 
 # data files
-data/bets.csv
+naive_approach/data/bets.csv
