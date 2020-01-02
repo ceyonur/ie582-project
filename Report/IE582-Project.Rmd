@@ -137,10 +137,11 @@ The *polr()* function is used for this model. Detailed information about the mod
 
 **Ordinal Forest** is a random forest based prediction method for ordinal response variables. Ordinal forests allow prediction using both low-dimensional and high-dimensional covariate data and can additionally be used to rank covariates with respect to their importance for prediction. The *ordfor()* function is used for this model. Detailed information about the model and used methods can be found from [here](https://cran.r-project.org/web/packages/ordinalForest/ordinalForest.pdf).
 
-##### Test Development Environment:
-We wanted to conduct a comprehensive analysis on the ML algorithms we decided on. To achieve it, we needed an efficient envorinment for parameter analysis and feature combinations which will also allow us to track the history of our study. Therefore, we created a test development environment in which we enumerate our scenarios with 5 different methods, different parameter settings and feature subsets. We begin to work on the model with features also used in the 4th homework and continue to add new features in time. As the general method, we created scenarios with both including all the features created and also the subsets of the features. In this way we tracked how the model improves and which features are more important. We also took the variable importances into account while constructing different scenarios.
+##### Test-Development Environment:
 
-A preview from our test development can be found below with the explanations for parameters used in the models. 
+We wanted to conduct a comprehensive analysis on the ML algorithms we decided on. To achieve it, we needed an efficient envorinment for parameter analysis and feature combinations which will also allow us to track the history of our study. Therefore, we created a test-development environment in which we enumerate our scenarios with 5 different methods, different parameter settings and feature subsets. We begin to work on the model with features also used in the 4th homework and continue to add new features in time. As the general method, we created scenarios with both including all the features created and also the subsets of the features. In this way we tracked how the model improves and which features are more important. We also took the variable importances into account while constructing different scenarios.
+
+Table below is our scenarios excel which alters our models according to given parameters. First row of the table explains the related parameter and the columns F1,F2,...F50... are the selected input features for related scenario. Thanks to this set up we were able to implement any changes in feature space, algrotihm or model parameters and kept history of the results.
 
 ```{r , include=TRUE,warning = FALSE,message=FALSE, echo=FALSE}
 
@@ -210,7 +211,9 @@ As we came to the results for selected features,  we observed that the best mode
 * H_Elo
 * A_Elo
 
-As a future study, we can work on enriched data including the list of the players, or player-centered metrics since the characteristics and compliance of the players may affect the results. It is also possible to use different ML algorithms such as gradient boosting method. 
+As a future study, we can work on enriched data including the list of the players, or player-centered metrics since the characteristics and compliance of the players may affect the results. Moreover data of coach changes or importance of the game(derby, play off, championship rival etc.) would be benefitical. It is also possible to use different ML algorithms such as gradient boosting method. 
+
+It is not present in the content of the project but an optimization algorithm that brings few games together in order to maximize the expected return using output of this model and real odds, might be useful for betting purposes.
 
 ## 6. Code
 
