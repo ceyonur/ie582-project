@@ -248,3 +248,4 @@ RoundResults <- RoundResults[,.(M_id,Home = match_hometeam_name, Away = match_aw
                                 HomeWin,Draw,AwayWin)]
 
 CountNAforeach(Matches)
+model_txt = paste(t(RoundResults[, c("M_id", "HomeWin", "Draw", "AwayWin")]), collapse=',')
