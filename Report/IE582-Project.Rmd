@@ -1,6 +1,6 @@
 ---
 title: "IE582-Project"
-author: "Barış Işık & Ceyhun Onur & Seval Ata"
+author: "Group 5: Barış Işık & Ceyhun Onur & Seval Ata"
 date: "03.01.2020"
 output: html_document
 ---
