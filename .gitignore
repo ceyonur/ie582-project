@@ -36,5 +36,8 @@ vignettes/*.pdf
 rsconnect/
 packrat/lib*/
 
+.DS_Store
+~$*
+
 # data files
 naive_approach/data/bets.csv
